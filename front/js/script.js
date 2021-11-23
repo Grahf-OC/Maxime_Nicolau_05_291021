@@ -10,6 +10,7 @@ fetch(url)
   })
   .then((response) => {
     displayProducts(response);
+    console.log(response);
   })
   .catch((err) => {
     console.log("error");

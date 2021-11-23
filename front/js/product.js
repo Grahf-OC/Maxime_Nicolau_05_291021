@@ -19,6 +19,7 @@ const getProduct = async () => {
     .then((response) => {
       console.log(response);
       canap = response;
+      addToCart(response);
     })
     .catch((err) => {
       console.log("error");
@@ -30,10 +31,14 @@ const getProduct = async () => {
   document.getElementById("title").innerHTML = canap.name;
   document.getElementById("price").innerHTML = canap.price;
   document.getElementById("description").innerHTML = canap.description;
-  document.getElementById(
-    "colors"
-  ).innerHTML = /*html*/ `<option value="">--SVP, choisissez une couleur --</option><option value=${canap.colors[0]}>${canap.colors[0]}</option>
-  <option value=${canap.colors[1]}>${canap.colors[1]}</option>`;
+  document.getElementById("colors").innerHTML =
+    "<option value=>--SVP, choisissez une couleur --</option>";
+
+  for (let color of canap.colors) {
+    document.getElementById(
+      "colors"
+    ).innerHTML += /*html*/ `<option value=${color}>${color}</option>`;
+  }
 };
 getProduct();
 
@@ -42,19 +47,35 @@ getProduct();
 const clickCart = document.getElementById("addToCart");
 const getColor = document.getElementById("colors");
 const getQty = document.getElementById("quantity");
+const getImage = document.querySelector(".item__img");
+const getName = document.getElementById("title");
+const getPrice = document.getElementById("price");
+const getDescription = document.getElementById("description");
+
 let cart = [];
 
-const addToCart = () => {
+const addToCart = (canap) => {
   clickCart.addEventListener("click", () => {
     let canapColor = getColor.value;
     let canapQty = getQty.value;
+    let canapImage = canap.imageUrl;
+    let canapAlt = canap.altTxt;
+    let canapName = canap.name;
+    let canapPrice = canap.price;
+    let canapDescription = canap.description;
+    console.log(canap);
+
     let canapInfos = {
       id: canapId,
       quantity: canapQty,
       color: canapColor,
+      image: canapImage,
+      alt: canapAlt,
+      name: canapName,
+      price: canapPrice,
+      description: canapDescription,
     };
-    console.log(canapId);
-    console.log(canapColor);
+    console.log(canapInfos);
 
     const checkIfPresent = cart.find((product) => {
       console.log(product);
@@ -79,9 +100,10 @@ const addToCart = () => {
         cart.push(canapInfos);
       }
 
-      localStorage.setItem("produit", cart);
-      JSON.stringify(canapInfos);
-      console.log(cart);
+      let cartJson = JSON.stringify(cart);
+      localStorage.setItem("panier", cartJson);
+
+      console.log(cartJson);
     }
   });
 };
