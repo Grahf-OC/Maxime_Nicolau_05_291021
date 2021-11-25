@@ -1,5 +1,7 @@
 let getCanap = document.getElementById("items");
 const url = "http://localhost:3000/api/products";
+let cartJson = localStorage.getItem("panier");
+console.log(cartJson);
 
 //on récupère avec la méthode GET par défaut les données depuis l'API et on passe la réponse à notre fonction displayProducts
 fetch(url)
@@ -30,7 +32,7 @@ const displayProducts = (products) => {
             </article>
           </a>`;
   }
-}
+};
 
 window.setTimeout(function () {
   console.log("ok");
@@ -59,8 +61,6 @@ window.setTimeout((bonjour) => {
 window.setTimeout((bonjour) => {
   console.log(bonjour);
 }, 1000);
-
-
 
 /*fetch(url)
   .then((res)=> res.json())

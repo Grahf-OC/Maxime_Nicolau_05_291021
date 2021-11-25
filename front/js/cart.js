@@ -4,10 +4,8 @@ let cart = JSON.parse(cartJson);
 
 console.log(cart);
 
-
 const printCart = () => {
   for (let canap of cart) {
-
     document.getElementById("cart__items").innerHTML +=
       /*html*/
       `<article class="cart__item" data-id=${canap.id} data-color=${canap.color}>
@@ -30,8 +28,33 @@ const printCart = () => {
         </div>
       </div>
     </div>
-  </article>;`
+  </article>;`;
   }
 };
 
 printCart();
+
+let setQuantity = document.querySelectorAll(".itemQuantity");
+
+console.log(cart);
+
+const changeQuantity = () => {
+  setQuantity.forEach((el) => {
+    el.addEventListener("change", (e) => {
+      let parent = e.target.closest("[data-id]");
+      console.log(parent);
+
+      const findProduct = cart.find((product) => {
+        let id = parent.dataset.id;
+        console.log(product.quantity);
+        if (product.id === id) {
+          return (product.quantity = e.target.value);
+        }
+      });
+      let jsonCart = JSON.stringify(cart);
+      localStorage.setItem("panier", jsonCart);
+    });
+  });
+};
+
+changeQuantity();
