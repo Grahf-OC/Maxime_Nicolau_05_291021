@@ -58,3 +58,26 @@ const changeQuantity = () => {
 };
 
 changeQuantity();
+
+let deleteButton = document.querySelectorAll(".deleteItem");
+
+const removeProduct = () => {
+  deleteButton.forEach((el) => {
+    el.addEventListener("click", (e) => {
+      let parent = e.target.closest("[data-id]");
+      let id = parent.dataset.id;
+      let color = parent.dataset.color;
+      console.log(color);
+
+      const newCart = cart.filter((product) => {
+       return product.id !== id || product.color !== color
+       
+      });
+      let jsonCart = JSON.stringify(newCart);
+      console.log(newCart)
+      localStorage.setItem("panier", jsonCart);
+      parent.remove();
+    });
+  });
+};
+removeProduct();
