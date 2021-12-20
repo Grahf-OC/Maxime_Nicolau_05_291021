@@ -214,5 +214,57 @@ docMail.addEventListener("change", () => {
   }
 });
 
+// Fonction qui envoie la commande si le formulaire est ok
 
+const sendCommand = () => {
+  document.getElementById("order").addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (
+      isInputValid("firstName", /^[a-zA-Z\.\-\s]+$/) &&
+      isInputValid("lastName", /^[a-zA-Z\.\-\s]+$/) &&
+      isInputValid("address", /^[\w-\.\-\s,]+$/) &&
+      isInputValid("city", /^([\d\s]{5,6})+[,\s]+[\w-\.\-\s,]+$/) &&
+      isInputValid("email", /^([\w-\.]{1,15})+@([\w-]+\.)+[\w-]{2,4}$/g)
+    ) {
+      let contact = {
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        address: document.getElementById("address").value,
+        city: document.getElementById("city").value,
+        email: document.getElementById("email").value,
+      };
+
+      let cart = getStorage();
+      let products = cart.map((product) => product.id);
+      let order = {
+        contact,
+        products,
+      };
+
+      fetch("http://localhost:3000/api/products/order", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(order),
+      })
+        .then((res) => res.json())
+
+        .then((data) => {
+          //localStorage.clear();
+          document.location.href = `confirmation.html?id=${data.orderId}`;
+        })
+        .catch(() => {
+          console.log("FetchError");
+        });
+    } else {
+      alert = "Veuillez vérifier le formulaire";
+    }
+  });
+};
+
+sendCommand();
 
