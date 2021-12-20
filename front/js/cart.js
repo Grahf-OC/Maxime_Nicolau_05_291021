@@ -127,3 +127,92 @@ const showTotalPrice = () => {
 
 showTotalPrice();
 
+//...................................FORMULAIRE.............................
+
+const isInputValid = (inputId, regex) => {
+  let doc = document.getElementById(inputId);
+  if (regex.test(doc.value)) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+//Vérification du firstName
+
+let docFirstName = document.getElementById("firstName");
+
+docFirstName.addEventListener("change", () => {
+  let messFirstName = document.getElementById("firstNameErrorMsg");
+  const isFirstNameValid = isInputValid("firstName", /^[a-zA-Z\.\-\s]+$/);
+  if (isFirstNameValid) {
+    messFirstName.textContent = "";
+  } else {
+    messFirstName.textContent = "Prénom non valide";
+  }
+});
+
+//Vérification du lastName
+
+let docLastName = document.getElementById("lastName");
+
+docLastName.addEventListener("change", () => {
+  let messLastName = document.getElementById("lastNameErrorMsg");
+  const isLastNameValid = isInputValid("lastName", /^[a-zA-Z\.\-\s]+$/);
+  if (isLastNameValid) {
+    messLastName.textContent = "";
+  } else {
+    messLastName.textContent = "Nom non valide";
+  }
+});
+
+//Vérification adresse
+
+let docAddress = document.getElementById("address");
+
+docAddress.addEventListener("change", () => {
+  let messAddress = document.getElementById("addressErrorMsg");
+  const isAddressValid = isInputValid("address", /^[\w-\.\-\s,]+$/);
+  if (isAddressValid) {
+    messAddress.textContent = "";
+  } else {
+    messAddress.textContent = "Adresse non valide";
+  }
+});
+
+//Vérification code postal + ville
+
+let docCity = document.getElementById("city");
+
+docCity.addEventListener("change", () => {
+  let messCity = document.getElementById("cityErrorMsg");
+  const isCityValid = isInputValid(
+    "city",
+    /^([\d\s]{5,6})+[,\s]+[\w-\.\-\s,]+$/
+  );
+  if (isCityValid) {
+    messCity.textContent = "";
+  } else {
+    messCity.textContent = " Code postal suivi de ville";
+  }
+});
+
+//Vérification du mail
+
+let docMail = document.getElementById("email");
+
+docMail.addEventListener("change", () => {
+  let messMail = document.getElementById("emailErrorMsg");
+  const isEmailValid = isInputValid(
+    "email",
+    /^([\w-\.]{1,15})+@([\w-]+\.)+[\w-]{2,4}$/g
+  );
+  if (isEmailValid) {
+    messMail.textContent = "";
+  } else {
+    messMail.textContent = "Mail non valide";
+  }
+});
+
+
+
