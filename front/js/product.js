@@ -3,17 +3,21 @@ const url = new URL(window.location.href);
 const canapId = url.searchParams.get("id");
 const urlProduct = `http://localhost:3000/api/products/${canapId}`;
 let canap;
-let cartJson = localStorage.getItem("panier");
-console.log(cartJson);
-let cart;
 
-if (cartJson == null) {
-  cart = [];
-} else {
-  cart = JSON.parse(cartJson);
-}
+const getStorage = () => {
+  const cart = JSON.parse(localStorage.getItem("panier")) || [];
+  return cart;
 
-console.log(cart);
+  /*if (cart == null) {
+    return [];
+  } else {
+    return cart;
+  }*/
+};
+
+const saveStorage = (cart) => {
+  return localStorage.setItem("panier", JSON.stringify(cart));
+};
 
 //Cette fonction envoie une requête GET à l'API pour récupérer les données du produit.
 const fetchApi = () => {
@@ -56,77 +60,53 @@ const getProduct = async () => {
 };
 getProduct();
 
-const clickCart = document.getElementById("addToCart");
-const getColor = document.getElementById("colors");
-const getQty = document.getElementById("quantity");
-const getImage = document.querySelector(".item__img");
-const getName = document.getElementById("title");
-const getPrice = document.getElementById("price");
-const getDescription = document.getElementById("description");
-
 /* cart est l'array du panier. La fonction addToCart écoute le clic sur le bouton addToCart, puis elle
 récupère la quantité du produit définie par l'utilisateur, sa couleur et toutes les informations le concernant, puis les stocke
 dans l'objet canapInfos.*/
 
 const addToCart = (canap) => {
-  clickCart.addEventListener("click", () => {
-    let canapColor = getColor.value;
-    let canapQty = getQty.value;
-    let canapImage = canap.imageUrl;
-    let canapAlt = canap.altTxt;
-    let canapName = canap.name;
-    let canapPrice = canap.price;
-    let canapDescription = canap.description;
-    console.log(canap);
-
+  document.getElementById("addToCart").addEventListener("click", () => {
     let canapInfos = {
       id: canapId,
-      quantity: canapQty,
-      color: canapColor,
-      image: canapImage,
-      alt: canapAlt,
-      name: canapName,
-      price: canapPrice,
-      description: canapDescription,
+      quantity: document.getElementById("quantity").value,
+      color: document.getElementById("colors").value,
+      image: canap.imageUrl,
+      alt: canap.altTxt,
+      name: canap.name,
+      price: canap.price,
+      description: canap.description,
     };
     console.log(canapInfos);
+
+    let cart = getStorage();
 
     /* Cette fonction vérifie si l'id du produit est déjà présent avec cette couleur dans l'array panier. Si oui, elle augmente sa quantité de 1.
     Sinon, elle le push vers l'array cart. */
     const checkIfPresent = cart.find((product) => {
       console.log(product);
-      return product.id === canapId && product.color === canapColor;
+      return product.id === canapId && product.color === canapInfos.color;
     });
     console.log(checkIfPresent);
 
-    if (canapQty == 0 || canapColor == 0) {
+    if (canapInfos.quantity == 0 || canapInfos.color == 0) {
       alert("Veuillez choisir une couleur et une quantité svp.");
     } else {
       if (checkIfPresent != undefined) {
         //même chose que if (checkIfPresent)
         for (let product of cart) {
-          if (product.id === canapId && product.color === canapColor) {
+          if (product.id === canapId && product.color === canapInfos.color) {
             product.quantity++;
             console.log(product.quantity);
           }
         }
-
-        console.log(canapQty);
       } else {
         cart.push(canapInfos);
+        console.log(canapInfos);
       }
 
       // L'array cart est ensuite transformé en JSON, puis envoyé vers le local storage
 
-      let jsonCart = JSON.stringify(cart);
-      localStorage.setItem("panier", jsonCart);
-      
-
-      console.log(jsonCart);
+      saveStorage(cart);
     }
   });
 };
-
-addToCart();
-
-

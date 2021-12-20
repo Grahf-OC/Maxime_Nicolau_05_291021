@@ -1,4 +1,3 @@
-let getCanap = document.getElementById("items");
 const url = "http://localhost:3000/api/products";
 let cartJson = localStorage.getItem("panier");
 console.log(cartJson);
@@ -12,6 +11,7 @@ fetch(url)
   })
   .then((response) => {
     displayProducts(response);
+    
     console.log(response);
   })
   .catch((err) => {
@@ -23,47 +23,15 @@ une boucle qui parcoure les produits renvoyés et innerHTML les informations de 
 
 const displayProducts = (products) => {
   for (let product of products) {
-    getCanap.innerHTML += /*html*/ `
-            <a href="./product.html?id=${product._id}">
-            <article>
-              <img src="${product.imageUrl}" alt="${product.altTxt}">
-              <h3 class="productName">${product.name}</h3>
-              <p class="productDescription">${product.description}</p>
-            </article>
-          </a>`;
-  }
+    let productClick = document.createElement("a");
+    productClick.href = `./product.html?id=${product._id}`;
+    document.getElementById("items").appendChild(productClick);
+    productClick.innerHTML = /*html*/`<article>
+<img src="${product.imageUrl}" alt="${product.altTxt}">
+<h3 class="productName">${product.name}</h3>
+<p class="productDescription">${product.description}</p>
+</article>`;
+
+  } 
 };
 
-window.setTimeout(function () {
-  console.log("ok");
-}, 1000);
-
-window.setTimeout(() => {
-  console.log("ok");
-}, 1000);
-
-window.setTimeout(function (bonjour, coucou, salut) {
-  console.log(bonjour, coucou, salut);
-}, 1000);
-
-window.setTimeout((bonjour, coucou, salut) => {
-  console.log(bonjour, coucou, salut);
-}, 1000);
-
-window.setTimeout(function (bonjour) {
-  console.log(bonjour);
-}, 1000);
-
-window.setTimeout((bonjour) => {
-  console.log(bonjour);
-}, 1000);
-
-window.setTimeout((bonjour) => {
-  console.log(bonjour);
-}, 1000);
-
-/*fetch(url)
-  .then((res)=> res.json())
-  .then((response)=> {
-    displayProducts(response);
-  });*/
