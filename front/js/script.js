@@ -1,6 +1,6 @@
 const url = "http://localhost:3000/api/products";
-let cartJson = localStorage.getItem("panier");
-console.log(cartJson);
+const cart = localStorage.getItem("panier");
+console.log(cart);
 
 //on récupère avec la méthode GET par défaut les données depuis l'API et on passe la réponse à notre fonction displayProducts
 fetch(url)
@@ -11,7 +11,7 @@ fetch(url)
   })
   .then((response) => {
     displayProducts(response);
-    
+
     console.log(response);
   })
   .catch((err) => {
@@ -26,12 +26,10 @@ const displayProducts = (products) => {
     let productClick = document.createElement("a");
     productClick.href = `./product.html?id=${product._id}`;
     document.getElementById("items").appendChild(productClick);
-    productClick.innerHTML = /*html*/`<article>
+    productClick.innerHTML = /*html*/ `<article>
 <img src="${product.imageUrl}" alt="${product.altTxt}">
 <h3 class="productName">${product.name}</h3>
 <p class="productDescription">${product.description}</p>
 </article>`;
-
-  } 
+  }
 };
-

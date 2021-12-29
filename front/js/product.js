@@ -1,20 +1,17 @@
-// variable canadId stocke l'id de la page actuelle
+// constante canapId stocke l'id de la page actuelle que l'on récupère avec searchParams.get
 const url = new URL(window.location.href);
 const canapId = url.searchParams.get("id");
 const urlProduct = `http://localhost:3000/api/products/${canapId}`;
 let canap;
 
+/*Si cart est égal à null, la fonction créée un array vide qu'elle stocke dans la constante cart. Si le localStorage n'est pas vide, 
+son contenu est stocké dans la constante cart après avoir été parse car il était en JSON. Enfin, la fonction renvoie cart.*/
 const getStorage = () => {
   const cart = JSON.parse(localStorage.getItem("panier")) || [];
   return cart;
-
-  /*if (cart == null) {
-    return [];
-  } else {
-    return cart;
-  }*/
 };
 
+//La fonction ajoute au local storage un objet qu'on passe en paramètre après l'avoir converti en JSON.
 const saveStorage = (cart) => {
   return localStorage.setItem("panier", JSON.stringify(cart));
 };
@@ -29,7 +26,7 @@ const fetchApi = () => {
 };
 
 /*On récupère les informations du canapé sur lequel l'utilisateur a cliqué.
-On stocke le résultat renvoyé par l'API dans la variable canap.
+On stocke le résultat renvoyé par l'API dans la variable canap et on la passe également en paramètre de la fonction addToCart.
 On innerHTML ensuite les informations du canapé */
 
 const getProduct = async () => {
@@ -60,7 +57,7 @@ const getProduct = async () => {
 };
 getProduct();
 
-/* cart est l'array du panier. La fonction addToCart écoute le clic sur le bouton addToCart, puis elle
+/* La fonction addToCart écoute le clic sur le bouton addToCart, puis elle
 récupère la quantité du produit définie par l'utilisateur, sa couleur et toutes les informations le concernant, puis les stocke
 dans l'objet canapInfos.*/
 
@@ -83,11 +80,9 @@ const addToCart = (canap) => {
     /* Cette fonction vérifie si l'id du produit est déjà présent avec cette couleur dans l'array panier. Si oui, elle augmente sa quantité de 1.
     Sinon, elle le push vers l'array cart. */
     const checkIfPresent = cart.find((product) => {
-      console.log(product);
       return product.id === canapId && product.color === canapInfos.color;
     });
-    console.log(checkIfPresent);
-
+    //Vérifie si l'utilisateur a bien choisi une quantité et une couleur, sinon lui demande de le faire.
     if (canapInfos.quantity == 0 || canapInfos.color == 0) {
       alert("Veuillez choisir une couleur et une quantité svp.");
     } else {
@@ -96,16 +91,12 @@ const addToCart = (canap) => {
         for (let product of cart) {
           if (product.id === canapId && product.color === canapInfos.color) {
             product.quantity++;
-            console.log(product.quantity);
           }
         }
       } else {
         cart.push(canapInfos);
-        console.log(canapInfos);
       }
-
-      // L'array cart est ensuite transformé en JSON, puis envoyé vers le local storage
-
+      // L'array cart est ensuite converti en JSON, puis envoyé vers le local storage
       saveStorage(cart);
     }
   });
